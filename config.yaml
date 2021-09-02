@@ -1,6 +1,6 @@
 baseURL: http://example.org/
 languageCode: en-us
-title: Portfolio website for Kostis Christodoulou
+title: Portfolio website Francois Mizrahi
 theme: forty
 googleAnalytics: ''
 disqusShortname: ''
@@ -15,8 +15,8 @@ params:
   contact:
     address:
       - city: London
-        country: Country
-        street: Street
+        country: UK
+        street: regent's Park
         title: Address
     buttonClear: Clear
     buttonSend: Send message
@@ -35,7 +35,7 @@ params:
     text: Please visit [this page](/)
   favicon: favicon.ico
   footer:
-    copyright: Company Name
+    copyright: Francois Mizrahi
     enable: yes
     quicklinks:
       - alt: HTML5 UP
@@ -44,19 +44,19 @@ params:
     social:
       - icon: fa-twitter
         label: Twitter
-        url: https://www.twitter.com
-      - icon: fa-facebook
-        label: Facebook
-        url: https://www.facebook.com
-      - icon: fa-instagram
-        label: Instagram
-        url: https://www.instagram.com
-      - icon: fa-github
-        label: GitHub
-        url: https://www.github.com
-      - icon: fa-linkedin
-        label: LinkedIn
-        url: https://www.linkedin.com
+        url: https://twitter.com/FrancoisMizrahi
+      # - icon: fa-facebook
+      #   label: Facebook
+      #   url: https://www.facebook.com
+      # - icon: fa-instagram
+      #   label: Instagram
+      #   url: https://www.instagram.com
+      # - icon: fa-github
+      #   label: GitHub
+      #   url: https://www.github.com
+      # - icon: fa-linkedin
+      #   label: LinkedIn
+      #   url: https://www.linkedin.com
   image: ''
   name: Your name
   navigation:
