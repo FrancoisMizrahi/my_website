@@ -1,0 +1,329 @@
+---
+categories:
+- ""
+- ""
+date: "2017-10-31T22:42:51-05:00"
+description: Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna
+  sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa
+  sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem
+  consequat tincidunt. Vivamus et sagittis tempus.
+draft: false
+image: pic07.jpg
+keywords: ""
+slug: francois
+title: Aliquam
+---
+
+```{r load-libraries, warning=FALSE, message=FALSE, echo=FALSE}
+library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+library(gapminder)  # gapminder dataset
+library(here)
+library(janitor)
+```
+
+# Francois' Biography
+![](https://media-exp1.licdn.com/dms/image/C4E03AQFwPoeBWWouKg/profile-displayphoto-shrink_400_400/0/1599078939714?e=1635379200&v=beta&t=fjucSNn5CH_RpgK7QDllgpxDeB2RdtoaykivcAcKsTQ)
+
+## Education
+I’m **Francois**. As you will probably guess from my accent, I’m **french** from Paris. I grew up with **seven siblings**, and all of my older brothers and sisters were in engineering. So quite early on, I really wanted to forge my own path, so I decided to go study *business and management* in the UK. 
+
+## Data
+During my time as a **product manager** at [Credit.fr](https://www.credit.fr/), I saw first hand how central data has become in decision making especially in the *Fintech* industry.  And I found it fascinating how technology, data and the digital transformation has reshaped modern management. It really made me understand how critical it is for me to learn how to leverage:
+
+- Business knowledge
+- Technical skills
+
+## Why LBS
+My experience as a **data engineer** at [Papernest](https://www.papernest.com/) gave me many of the technical tools needed to manipulate data efficiently but I am still missing some of the analytics and management skills I need to use these tools in practical business situations.
+And so the Master in Analytics and Management at LBS is the perfect opportunity for me to combine advanced technical education with modern management skills before taking a product manager role in the Fintech industry.
+
+## Interests
+I am also passionate about:
+
+1. *Photography*
+2. *Photo Editing*
+3. *Art*
+
+
+# Gapminder country comparison
+
+The `gapminder` dataset  has data on life expectancy, population, and GDP per capita for 142 countries from 1952 to 2007.
+
+```{r}
+head(gapminder, 20)
+```
+
+```{r}
+country_data <- gapminder %>%
+            filter(country == "France")
+
+continent_data <- gapminder %>%
+            filter(continent == "Europe")
+```
+
+Let's look at **France's** life expectancy over time.
+
+```{r, lifeExp_one_country}
+plot1 <- ggplot(data = country_data, mapping = aes(x = year, y = lifeExp))+
+   geom_point() +
+   geom_smooth(se = FALSE)+
+   NULL
+```
+
+```{r, lifeExp_one_country_with_label}
+plot1<- plot1 +
+  labs(title = "France's life expectency over the years",
+      x = "Year",
+      y = "Life Expectancy") +
+  NULL
+
+plot1
+```
+
+Now we can look at life expectancy in all countries in **Europe**.
+
+```{r lifeExp_one_continent}
+ggplot(continent_data, mapping = aes(x = year, y = lifeExp  , colour=country, group=country))+
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  NULL
+```
+
+Let's look at the trend in the other **continents**
+
+```{r lifeExp_facet_by_continent}
+ggplot(data = gapminder , mapping = aes(x = year, y = lifeExp , colour= continent))+
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  facet_wrap(~continent) +
+  theme(legend.position="none") +
+  NULL
+```
+
+> The evolution of life expectancy since 1952 is a story of inequalities. Even if all continents have general upward trends, significant gaps still exist, even within the same continents. In Africa, an almost 40 years difference separates more developed countries from less developed ones, and the gap is still growing. Development seems to be the primary indicator of a continent's life expectancy as Europe and Oceania have the highest average life expectancy.
+
+
+# Brexit vote analysis
+
+We will have a look at the results of the 2016 Brexit vote in the UK. 
+
+```{r load_brexit_data, warning=FALSE, message=FALSE}
+brexit_results <- read_csv(here::here("data","brexit_results.csv"))
+
+glimpse(brexit_results)
+```
+
+The data comes from [Elliott Morris](https://www.thecrosstab.com/), who cleaned it and made it available through his [DataCamp class on analysing election and polling data in R](https://www.datacamp.com/courses/analyzing-election-and-polling-data-in-r).
+
+Our main outcome variable (or y) is `leave_share`, which is the percent of votes cast in favour of Brexit, or leaving the EU. Each row is a UK [parliament constituency](https://en.wikipedia.org/wiki/United_Kingdom_Parliament_constituencies).
+
+To get a sense of the spread, or distribution, of the data, we plot a histogram, a density plot, and the empirical cumulative distribution function of the leave % in all constituencies.
+
+```{r brexit_histogram, warning=FALSE, message=FALSE}
+
+# histogram
+ggplot(brexit_results, aes(x = leave_share)) +
+  geom_histogram(binwidth = 2.5, color="black", fill="lightblue", aes(y=..density..)) +
+  geom_density(alpha=.1, fill="#FF6666") +
+  labs(title = "Histogram of leave share across UK parliament constituencies",
+       x = "Percent of votes cast in favour of leaving the EU",
+       y = "Number of UK parliament constituencies")
+
+# density plot-- think smoothed histogram
+ggplot(brexit_results, aes(x = leave_share)) +
+  geom_density() +
+  labs(title = "Density of leave share across UK parliament constituencies",
+       x = "Percent of votes cast in favour of leaving the EU",
+       y = "Density")
+
+
+# The empirical cumulative distribution function (ECDF)
+ggplot(brexit_results, aes(x = leave_share)) +
+  stat_ecdf(geom = "step", pad = FALSE) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Empirical cumulative distribution of leave share across UK parliament constituencies",
+       x = "Percent of votes cast in favour of leaving the EU",
+       y = "Cumulative Percentage of the population")
+
+
+
+```
+
+One common explanation for the Brexit outcome was fear of immigration and opposition to the EU's more open border policy. We check the relationship (or correlation) between the proportion of native born residents in a constituency and its `leave_share`. To do this, let us get the correlation between the two variables
+
+```{r brexit_immigration_correlation}
+brexit_results %>%
+  select(leave_share, born_in_uk) %>%
+  cor()
+```
+
+The correlation is almost 0.5, which shows that the two variables are positively correlated.
+
+We can also create a scatterplot between these two variables.
+
+```{r brexit_immigration_plot}
+ggplot(brexit_results, aes(x = born_in_uk, y = leave_share, size= age_18to24)) +
+  geom_point(alpha=0.3) +
+
+  # add a smoothing line, and use method="lm" to get the best straight-line
+  geom_smooth(method = "lm") +
+
+  # use a white background and frame the plot with a black box
+  theme_bw() +
+  
+  labs(title = "How the place of birth affected the vote",
+       x = "Percent of votes cast in favour of leaving the EU",
+       y = "Percent of people born in the UK",
+       size= "Percent of people between 18 and 24") +
+  NULL
+```
+```{r brexit_immigration_plot_age}
+ggplot(brexit_results, aes(x = age_18to24, y = leave_share)) +
+  geom_point(alpha=0.3) +
+
+  # add a smoothing line, and use method="lm" to get the best straight-line
+  geom_smooth(method = "lm") +
+
+  # use a white background and frame the plot with a black box
+  theme_bw() +
+  labs(title = "How age affected the vote",
+       x = "Percent of people between 18 and 24",
+       y = "Percent of votes cast in favour of leaving the EU") +
+  NULL
+```
+
+> From our analysis, it is clear that a strong relationship exists between the place of birth and the desire to leave the EU. This could be explained by a strong attachment to their home country and a fear of seeing some significant changes due to immigration. Also, it is interesting to note that this relationship can be extended to the age of the population. We could speculate that the evolution of education has shifted the mind of younger generations toward staying in the EU.  
+
+
+# Animal rescue incidents attended by the London Fire Brigade
+
+[The London Fire Brigade](https://data.london.gov.uk/dataset/animal-rescue-incidents-attended-by-lfb) attends a range of non-fire incidents (which we call 'special services'). These 'special services' include assistance to animals that may be trapped or in distress. The data is provided from January 2009 and is updated monthly. A range of information is supplied for each incident including some location information (postcode, borough, ward), as well as the data/time of the incidents. We do not routinely record data about animal deaths or injuries.
+
+Please note that any cost included is a notional cost calculated based on the length of time rounded up to the nearest hour spent by Pump, Aerial and FRU appliances at the incident and charged at the current Brigade hourly rate.
+
+```{r load_animal_rescue_data, warning=FALSE, message=FALSE}
+
+url <- "https://data.london.gov.uk/download/animal-rescue-incidents-attended-by-lfb/8a7d91c2-9aec-4bde-937a-3998f4717cd8/Animal%20Rescue%20incidents%20attended%20by%20LFB%20from%20Jan%202009.csv"
+
+animal_rescue <- read_csv(url,
+                          locale = locale(encoding = "CP1252")) %>%
+  janitor::clean_names()
+
+
+glimpse(animal_rescue)
+```
+
+One of the more useful things one can do with any data set is quick counts, namely to see how many observations fall within one category.
+
+```{r, instances_by_calendar_year}
+animal_rescue %>%
+  count(cal_year, name="count")
+```
+
+Let us try to see how many incidents we have by animal group.
+
+```{r, animal_group_percentages}
+animal_rescue %>%
+
+  #count does the same thing as group_by and summarise
+  # name = "count" will call the column with the counts "count" ( exciting, I know)
+  # and 'sort=TRUE' will sort them from max to min
+  count(animal_group_parent, name="count", sort=TRUE) %>%
+  mutate(percent = round(100*count/sum(count),2))
+
+
+```
+
+Finally, let us have a loot at the notional cost for rescuing each of these animals. As the LFB says,
+
+> Please note that any cost included is a notional cost calculated based on the length of time rounded up to the nearest hour spent by Pump, Aerial and FRU appliances at the incident and charged at the current Brigade hourly rate.
+
+we need to fix `incident_notional_cost` as it is stored as a `chr`, or character, rather than a number.
+
+```{r, parse_incident_cost,message=FALSE, warning=FALSE}
+# readr::parse_number() will convert any numerical values stored as characters into numbers
+animal_rescue <- animal_rescue %>%
+
+  # we use mutate() to use the parse_number() function and overwrite the same variable
+  mutate(incident_notional_cost = parse_number(incident_notional_cost))
+
+```
+
+Now tht incident_notional_cost is numeric, let us quickly calculate summary statistics for each animal group.
+
+
+```{r, stats_on_incident_cost,message=FALSE, warning=FALSE}
+
+gouped_animal_rescue <- animal_rescue %>%
+
+  # group by animal_group_parent
+  group_by(animal_group_parent) %>%
+
+  # filter resulting data, so each group has at least 6 observations
+  filter(n()>6) %>%
+
+  # summarise() will collapse all values into 3 values: the mean, median, and count
+  # we use na.rm=TRUE to make sure we remove any NAs, or cases where we do not have the incident cos
+  summarise(mean_incident_cost = mean (incident_notional_cost, na.rm=TRUE),
+            median_incident_cost = median (incident_notional_cost, na.rm=TRUE),
+            sd_incident_cost = sd (incident_notional_cost, na.rm=TRUE),
+            min_incident_cost = min (incident_notional_cost, na.rm=TRUE),
+            max_incident_cost = max (incident_notional_cost, na.rm=TRUE),
+            count = n()) %>%
+
+  # sort the resulting data in descending order. You choose whether to sort by count or mean cost.
+  arrange(-mean_incident_cost)
+gouped_animal_rescue
+```
+
+```{r, stats_on_incident_cost_compare,message=FALSE, warning=FALSE}
+
+animal_rescue %>%
+  group_by(animal_group_parent) %>%
+  filter(n()>6) %>%
+
+  # summarise() will collapse all values into 3 values: the mean, median, and count
+  # we use na.rm=TRUE to make sure we remove any NAs, or cases where we do not have the incident cos
+  summarise(mean_incident_cost = mean (incident_notional_cost, na.rm=TRUE),
+            median_incident_cost = median (incident_notional_cost, na.rm=TRUE),
+            mean_median_diff = mean_incident_cost - median_incident_cost) %>%
+
+  # sort the resulting data in descending order. You choose whether to sort by count or mean cost.
+  arrange(-mean_median_diff)
+
+```
+
+```{r, stats_on_incident_cost_box,message=FALSE, warning=FALSE}
+plot <- animal_rescue %>%
+  filter(n()>6) %>%
+  ggplot(aes(x=animal_group_parent, y=incident_notional_cost))
+
+plot + geom_boxplot()
+```
+
+> We can see that the diffrence between the mean and the median is du to numerous outliers that impact the mean far more than the median.
+
+Finally, let us plot a few plots that show the distribution of incident_cost for each animal group.
+
+```{r, plots_on_incident_cost_by_animal_group,message=FALSE, warning=FALSE}
+
+# base_plot
+base_plot <- animal_rescue %>%
+  group_by(animal_group_parent) %>%
+  filter(n()>6) %>%
+  ggplot(aes(x=incident_notional_cost))+
+  facet_wrap(~animal_group_parent, scales = "free")+
+  theme_bw()
+
+base_plot + geom_histogram()
+base_plot + geom_density()
+base_plot + geom_boxplot()
+base_plot + stat_ecdf(geom = "step", pad = FALSE) +
+  scale_y_continuous(labels = scales::percent)
+
+
+
+```
+
+> The best graph to communicate the variability is the density plot, as it offers the best general vision of the cost of each animal parent group. The most expensive animal groups to rescue are the Horses, Cows and Deers. This is not surprising as it is logical that larger animals are more expensive to save. The differences in pattern could be explained by the range of different types of rescues possible for the animal and its living habitat.
+
