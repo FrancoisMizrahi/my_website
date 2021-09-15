@@ -7,9 +7,7 @@ disqusShortname: ''
 params:
   banner:
     buttonText: Get Started
-    subtitle: |-
-      A RESPONSIVE SITE TEMPLATE DESIGNED BY HTML5 UP
-      AND RELEASED UNDER THE CREATIVE COMMONS.
+    subtitle: Let's learn about the world through Data
     title: Hi, my name is Francois Mizrahi
   blog: {}
   contact:
@@ -37,26 +35,16 @@ params:
   footer:
     copyright: Francois Mizrahi
     enable: yes
-    quicklinks:
-      - alt: HTML5 UP
-        text: 'Design: '
-        url: https://www.html5up.net
     social:
       - icon: fa-twitter
         label: Twitter
         url: https://twitter.com/FrancoisMizrahi
-      # - icon: fa-facebook
-      #   label: Facebook
-      #   url: https://www.facebook.com
-      # - icon: fa-instagram
-      #   label: Instagram
-      #   url: https://www.instagram.com
-      # - icon: fa-github
-      #   label: GitHub
-      #   url: https://www.github.com
-      # - icon: fa-linkedin
-      #   label: LinkedIn
-      #   url: https://www.linkedin.com
+      - icon: fa-github
+        label: GitHub
+        url: https://github.com/FrancoisMizrahi
+      - icon: fa-linkedin
+        label: LinkedIn
+        url: https://www.linkedin.com/in/francois-mizrahi/
   image: ''
   name: Your name
   navigation:
@@ -76,8 +64,7 @@ params:
       - name: Elements
         url: elements.html
     menu: Menu
-    subtitle: By HTML5 Up
-    title: Forty
+    title: Home
   tiles:
     enable: yes
     showcase:
