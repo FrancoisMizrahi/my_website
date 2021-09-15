@@ -82,9 +82,9 @@ params:
     enable: yes
     showcase:
       - image: pic01.jpg
-        subtitle: Ipsum Dolor Sit Amet
-        title: Aliquam
-        url: blogs/aliquam
+        subtitle: LBS Applied Statistics Pre-course
+        title: Pre-course
+        url: blogs/francois
       - image: pic02.jpg
         subtitle: Feugiat Amet Tempus
         title: Tempus
